@@ -1,4 +1,5 @@
 ## config ##
 
-## THIS IS THE EXPERIENCE COST TO USE THE COMMAND /luckyman getluck ##
+## USE EXP COST AND THE NUMBER OF EXP COST FOR COMMAND /luckyman getluck##
+UseExpCost: true
 ExpCost: 5
