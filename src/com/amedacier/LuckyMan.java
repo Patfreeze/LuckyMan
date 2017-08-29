@@ -85,8 +85,8 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 	    Player player = event.getPlayer();
-	    player.playSound(player.getLocation(),Sound.ENTITY_LIGHTNING_IMPACT, 1F, 1F);
-	    player.spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation(), 1);
+	    player.playSound(player.getLocation(),Sound.ENTITY_FIREWORK_TWINKLE, 1F, 1F);
+	    player.spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation(), 20);
 	}
 	
 	public int getExpLevelCost() {
@@ -110,8 +110,9 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			// HELP COMMAND OR COMMAND WITHOUT ARGS
 			
 			// TAKE THE iEXP COST IN CONFIG IF NOT GOOD TAKE DEFAULT
-			
-			sender.sendMessage(sCorrectColor+String.format(language.getString("Beware"), getExpLevelCost()));
+			if(config.getBoolean("UseExpCost")) {
+				sender.sendMessage(sCorrectColor+String.format(language.getString("Beware"), getExpLevelCost()));	
+			}
 			sender.sendMessage(sObjectColor+command.getUsage());
 			return true;
 		}
@@ -120,7 +121,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			int iStep = 0;
 			
 		    Random randomGenerator = new Random();
-		    for (int idx = 0; idx <= 10; ++idx){
+		    for (int idx = 0; idx <= 5; ++idx){
 		    	iStep = randomGenerator.nextInt(3);
 		    }
 			
@@ -158,7 +159,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					sender.sendMessage(sObjectColor+language.getString("NothingHand"));
 				}
-				else if(player.getLevel() < getExpLevelCost()) {
+				else if(config.getBoolean("UseExpCost") && player.getLevel() < getExpLevelCost()) {
 					sender.sendMessage(sObjectColor+String.format(language.getString("NeedXP"), getExpLevelCost()));
 				}
 				else {
