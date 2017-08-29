@@ -2,4 +2,8 @@
 
 ## USE EXP COST AND THE NUMBER OF EXP COST FOR COMMAND /luckyman getluck##
 UseExpCost: true
+<<<<<<< HEAD
 ExpCost: 2
+=======
+ExpCost: 5
+>>>>>>> develop
