@@ -1,0 +1,85 @@
+################################################################
+## BEWARE WHEN YOU MODIFY THIS FILE IF ONE ERROR OCCURE THE MOD
+## WILL NOT WORK PROPERLY PERCENT MUST BE ALWAYS = 100
+################################################################
+
+## OBJECTS
+## maxItem is the maximum of objects so if 4 it will be between 1 to 4
+poor:
+  percent: 55
+  maxItem: 4
+  objects:
+    - 'BONE'
+    - 'SAPLING'
+    - 'SAND'
+    - 'LEAVES'
+    - 'GLASS'
+    - 'SANDSTONE'
+    - 'YELLOW_FLOWER'
+    - 'RED_ROSE'
+    - 'MOSSY_COBBLESTONE'
+    - 'WORKBENCH'
+    - 'FURNACE'
+    - 'SIGN'
+    - 'STONE_BUTTON'
+    - 'WOOD_BUTTON'
+    - 'STICK'
+    - 'CACTUS'
+average:
+  percent: 30
+  maxItem: 2
+  objects:
+    - 'COAL'
+    - 'COBBLESTONE'
+    - 'WOOD'
+    - 'LOG'
+    - 'GRAVEL'
+    - 'FEATHER'
+    - 'POTATO_ITEM'
+    - 'CARROT_ITEM'
+    - 'ACACIA_DOOR_ITEM'
+    - 'APPLE'
+    - 'BOW'
+    - 'ARMOR_STAND'
+    - 'BAKED_POTATO'
+    - 'BOAT_ACACIA'
+better:
+  percent: 10
+  maxItem: 1
+  objects:
+    - 'DIAMOND'
+    - 'GOLD_ORE'
+    - 'IRON_ORE'
+    - 'COAL_ORE'
+    - 'ANVIL'
+    - 'CHAINMAIL_BOOTS'
+    - 'CHAINMAIL_CHESTPLATE'
+    - 'CHAINMAIL_HELMET'
+    - 'CHAINMAIL_LEGGINGS'
+## SPECIAL PART WITH ENCHANT HERE SO BE VERY VERY CAREFULL HERE
+extra:
+  percent: 5
+  maxItem: 1
+  objects:
+    DIAMOND_SWORD:
+      - 'FIRE_ASPECT'
+      - 'DURABILITY'
+    DIAMOND_SPADE:
+      - 'DURABILITY'
+    DIAMOND_PICKAXE:
+      - 'LOOT_BONUS_BLOCKS'
+    DIAMOND_AXE:
+      - 'DURABILITY'
+    DIAMOND_HOE:
+      - 'DURABILITY'
+    DIAMOND_HELMET:
+      - 'OXYGEN'
+      - 'DURABILITY'
+    DIAMOND_CHESTPLATE:
+      - 'PROTECTION_EXPLOSIONS'
+      - 'DURABILITY'
+    DIAMOND_LEGGINGS:
+      - 'PROTECTION_FIRE'
+    DIAMOND_BOOTS:
+      - 'FROST_WALKER'
+      - 'DURABILITY'
