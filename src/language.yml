@@ -1,7 +1,18 @@
 ##language config EN ##
-Beware: BEWARE! The getluck cost %sxp level
+
+## FOR SIGN ##
+neededXp: Need %sXP
+signNotWork: This Sign is not set properly
+
+## ELSE ##
+BewareLevel: BEWARE! The getluck cost %sxp level minimum
+DelayReuse: You have to wait %s second%s to reuse it
+getLuckType: 'Sorry the %s does''nt exist'
+helpType: 'The type available are %s'
 ArgExplode: Arg! Explosion near you... Oh MY GOD...
 Zombify: Arg! Zombie near you... Oh noooo... To late.
+lightPlz: Arg! Who close the light...
+speedUp: Arg! To fast to be true...
 BeenTroll: thing they have been troll
 NothingHand: You have nothing in your hand!
 NeedXP: You need %sxp to use this function
