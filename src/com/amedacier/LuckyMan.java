@@ -111,6 +111,8 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			e.printStackTrace();
 		}
 		
+		getCommand("luckyman").setTabCompleter(new LuckyManTabCompleter());
+		
 	 // Enable our class to check for new players using onPlayerJoin()
 		getServer().getPluginManager().registerEvents(this, this);
 	}
@@ -123,7 +125,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 	    Player player = event.getPlayer();
-	    player.playSound(player.getLocation(),Sound.ENTITY_FIREWORK_TWINKLE, 1F, 1F);
+	    player.playSound(player.getLocation(),Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1F, 1F);
 	    player.spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation(), 20);
 	}
 	
@@ -173,12 +175,12 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	    else {
 	    	// DATA EXIST VERIFY THEN UPDATE IF NEEDED
 	    	iLeft = (calendar.getTimeInMillis() - playerdata.getLong("P_"+player.getUniqueId()+".timeRemain"))/1000;
-	    	//System.out.println("Remain : "+iLeft);
 	    	
 	    	// CHECK IF WE CAN DO IT AGAIN BY CHECK IN config.yml
 	    	if(iLeft >= config.getLong("iSecondDelay")) {
 	    		// Ex: IF iLeft=70 AND iSecondeDelay=60 HE CAN REUSE IT
 	    		// UPDATE DATA ALSO NAME IF CHANGE IT
+	    		
 		    	try {
 		    		playerdata.set("P_"+player.getUniqueId()+".name", player.getName());
 		    		playerdata.set("P_"+player.getUniqueId()+".timeRemain", calendar.getTimeInMillis());
@@ -197,6 +199,35 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	    }
 	    return false;
 	}
+
+	private int playMusic(Player player) {
+		
+		int iTime = 0;
+		for(float i=1; i<6; i++) {
+			iTime = this.playSound(player,(float) ((i+1)*2), (int) (i*4));
+		}
+		return iTime;
+	}
+	
+	private int playSound(Player player, Float dTest, int iTick) {
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			
+	        public void run()
+	        {
+	        	player.playSound(player.getLocation().add(-10,5,1),Sound.BLOCK_NOTE_BLOCK_HARP, 0.8F, dTest/8);
+	        	player.playSound(player.getLocation().add(-10,5,1),Sound.BLOCK_NOTE_BLOCK_BASS, 0.8F, dTest/8);
+	        	player.playSound(player.getLocation().add(10,5,1),Sound.BLOCK_NOTE_BLOCK_GUITAR, 0.8F, dTest/8);
+	        }
+		}, iTick); // 20 ticks = 1 second -- So will update every 1 second
+
+		return iTick;
+	}
+	
+	private void playErrorSound(Player p) {
+		playSound(p, 4F, 2);
+		playSound(p, 1F, 4);
+	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender,
@@ -209,7 +240,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		Player player = (Player) sender;
+		Player player1 = (Player) sender;
 		
 		// THE MAIN COMMAND
 		if ((command.getName().equalsIgnoreCase("luckyman") && args.length == 0) || command.getName().equalsIgnoreCase("luckyman") && args[0].equalsIgnoreCase("help")) { // If the player typed /basic then do the following...
@@ -227,12 +258,11 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			int iStep = 0;
 			
 		    Random randomGenerator = new Random();
-		    for (int idx = 0; idx <= 5; ++idx){
-		    	iStep = randomGenerator.nextInt(4);
+		    for (int idx = 0; idx <= 10; ++idx){
+		    	iStep = randomGenerator.nextInt(6);
 		    }
 			
 			// COMMAND FOR FUN HERE
-		    Player player1 = (Player) sender;
 		    PotionEffect Potion;
 			switch(iStep) {
 			case 0:
@@ -258,27 +288,38 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				sender.sendMessage(sObjectColor+language.getString("speedUp"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
+				
+			case 3:	
+				Potion = new PotionEffect(PotionEffectType.GLOWING, 400, 2);
+				player1.playSound(player1.getLocation(),Sound.BLOCK_GLASS_BREAK, 1F, 1F);
+				player1.addPotionEffect(Potion);
+				sender.sendMessage(sObjectColor+language.getString("LightUp"));
+				player1.performCommand("me "+language.getString("BeenTroll"));
+				break;
+				
+			case 4:	
+				Potion = new PotionEffect(PotionEffectType.JUMP, 400, 2);
+				player1.playSound(player1.getLocation(),Sound.ENTITY_RABBIT_JUMP, 1F, 1F);
+				player1.addPotionEffect(Potion);
+				sender.sendMessage(sObjectColor+language.getString("JumpingJack"));
+				player1.performCommand("me "+language.getString("BeenTroll"));
+				break;
 			
 			default:
-				player1.playSound(player1.getLocation(),Sound.ENTITY_ENDERDRAGON_FIREBALL_EXPLODE, 1F, 1F);
-				player1.playSound(player1.getLocation(),Sound.ENTITY_ENDERDRAGON_FIREBALL_EXPLODE, 2F, 2F);
+				player1.playSound(player1.getLocation(),Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
+				player1.playSound(player1.getLocation(),Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 2F, 2F);
 				sender.sendMessage(sObjectColor+language.getString("ArgExplode"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 			
 			}
-
-			
-			
 			return true;
 		}
 		else if (command.getName().equalsIgnoreCase("luckyman") && args[0].equalsIgnoreCase("getluck")) {
-			
 		
 			//DEFAULT TYPE IS SMALL
 			String sType = "small";
 			
-			//System.out.println(args.length + " args");
 			if(args.length == 1) {
 				sender.sendMessage(sObjectColor+String.format(language.getString("helpType"), "small, medium, high"));
 				return true;
@@ -301,36 +342,38 @@ public class LuckyMan extends JavaPlugin implements Listener{
 					sender.sendMessage(sObjectColor+String.format(language.getString("getLuckType"),args[1]));
 					return true;
 				}
-				//System.out.println("arg are " + args[1]);
 			}
 			
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(sErrorColor+"This command can only be run by a player.");
 			} else {
 				
-				Player player1 = (Player) sender;
 				// check if player have something in hand
 				if(player1.getInventory().getItemInMainHand().getType() == Material.AIR) {
+					playErrorSound(player1);
 					sender.sendMessage(sObjectColor+language.getString("NothingHand"));
 				}
 				else if(config.getBoolean("UseExpCost") && player1.getLevel() < getExpLevelCost(sType)) {
+					playErrorSound(player1);
 					sender.sendMessage(sObjectColor+String.format(language.getString("NeedXP"), getExpLevelCost(sType)));
 				}
 				else {
 					
-					// UPDATE TIME AND CHECK IF OK
-					if(!updateRemainTime(player)) {
+					// UPDATE TIME AFTER ITEM AND CHECK IF OK
+					if(!updateRemainTime(player1)) {
+						playErrorSound(player1);
 						return true;
 					}
 					
 					ItemStack objStack = getChangeItemStack(player1.getInventory().getItemInMainHand(), sender);
-					sender.sendMessage(sCorrectColor+String.format(language.getString("ConvertItem"), sErrorColor+player1.getInventory().getItemInMainHand().getType().toString(), sCorrectColor, objStack.getType().toString()));
+					sender.sendMessage(sCorrectColor+String.format(language.getString("ConvertItem"), sErrorColor+player1.getInventory().getItemInMainHand().getType().toString(), sCorrectColor, sObjectColor+objStack.getType().toString()));
+					
 					player1.getInventory().setItemInMainHand(new ItemStack(objStack));
-					player1.playSound(player1.getLocation(),Sound.BLOCK_NOTE_HARP, 1F, 1F);
-					player1.playSound(player1.getLocation(),Sound.BLOCK_NOTE_HARP, 3F, 3F);
+					
 					player1.setLevel(player1.getLevel()-getExpLevelCost(sType));
 					// return to default type
 					this.sTypeChoosen = "small";
+					return true;
 				}
 			}
 			return true;
@@ -389,7 +432,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	    if (p.hasPermission("sign.use")) {
 	 
 	        Block b = e.getClickedBlock();
-	        if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN) {
+	        if (b.getType() == Material.SIGN || b.getType() == Material.WALL_SIGN) {
 	   
 	            Sign sign = (Sign) b.getState();
 	            if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[LuckyMan]")) {
@@ -415,107 +458,131 @@ public class LuckyMan extends JavaPlugin implements Listener{
 
 	}
 	
-	public ItemStack getChangeItemStack(ItemStack ItemStackOld, CommandSender sender) {
-		
-		int iChangeForGood = 0;
-		List<String> a_sItem = new ArrayList<String>();
-		
-		int iRandomInt = 0;
-		int iRandomItem = 0;
-	    //note a single Random object is reused here
-	    Random randomGenerator = new Random();
-	    for (int idx = 0; idx <= 10; ++idx){
-	    	iRandomInt = randomGenerator.nextInt(100);
-	    }
-		
-	    iChangeForGood = iRandomInt;
-
-	    switch(this.sTypeChoosen) {
-	    	case "medium":
-	    		iChangeForGood = iRandomInt + randomGenerator.nextInt(15);
-	    		break;
-	    		
-	    	case "high":
-	    		iChangeForGood = iRandomInt + randomGenerator.nextInt(35);
-	    		break;
-	    		
-	    	default:
-	    		// NOTHING TO DO SMALL IS HERE TOO
-	    		break;
-	    }
-	    
-	    //System.out.println(this.sTypeChoosen + " " + iRandomInt);
-	    
-		ItemStack objStack;
-		
-		// SET PERCENTAGE NO NEED TO CHECK Extra.percent... This is the last the rest
-		int iPoorMaxPercent = objects.getInt("poor.percent");
-		int iAverageMaxPercent = iPoorMaxPercent + objects.getInt("average.percent");
-		int iBetterMaxPercent = iAverageMaxPercent + objects.getInt("better.percent");
-		
-		//System.out.println("0 "+iPoorMaxPercent+" "+iAverageMaxPercent+" "+iBetterMaxPercent);
-		
-		// POOR CHOICE HERE
-		if(iChangeForGood >= 0 && iChangeForGood < iPoorMaxPercent) {
-		
-			for(String sItem : objects.getStringList("poor.objects")) {
-				a_sItem.add(sItem);
-			}
-			
-			// GET THE RANDOM OBJECT TO PASS
-			iRandomItem = randomGenerator.nextInt(a_sItem.size());
-			
-			objStack = new ItemStack(Material.getMaterial((String) a_sItem.get(iRandomItem)));
-			objStack.setAmount(randomGenerator.nextInt(objects.getInt("poor.maxItem")+1)+1);
-		}
-		else if(iChangeForGood >= iPoorMaxPercent && iChangeForGood < iAverageMaxPercent) {
-			
-			for(String sItem : objects.getStringList("average.objects")) {
-				a_sItem.add(sItem);
-			}
-			
-			// GET THE RANDOM OBJECT TO PASS
-			iRandomItem = randomGenerator.nextInt(a_sItem.size());
-			
-			objStack = new ItemStack(Material.getMaterial((String) a_sItem.get(iRandomItem)));
-			objStack.setAmount(randomGenerator.nextInt(objects.getInt("average.maxItem")+1)+1);
-		}
-		else if(iChangeForGood >= iAverageMaxPercent && iChangeForGood < iBetterMaxPercent) {
-			
-			for(String sItem : objects.getStringList("better.objects")) {
-				a_sItem.add(sItem);
-			}
-			
-			// GET THE RANDOM OBJECT TO PASS
-			iRandomItem = randomGenerator.nextInt(a_sItem.size());
-			
-			objStack = new ItemStack(Material.getMaterial((String) a_sItem.get(iRandomItem)));
-			objStack.setAmount(randomGenerator.nextInt(objects.getInt("better.maxItem")+1)+1);
-		}
-		else if(iChangeForGood >= iBetterMaxPercent) {
-			
-			for (String key : objects.getConfigurationSection("extra.objects").getKeys(true)) {
-				a_sItem.add(key);
-			}
-			
-			// GET THE RANDOM OBJECT TO PASS
-			iRandomItem = randomGenerator.nextInt(a_sItem.size());
-			
-			objStack = new ItemStack(Material.getMaterial((String) a_sItem.get(iRandomItem)));
-			objStack.setAmount(1);
-			objStack.setDurability((short) 299);
-			
-			for(String sEnchant : objects.getStringList("extra.objects."+(String) a_sItem.get(iRandomItem))) {
-				objStack.addEnchantment(Enchantment.getByName(sEnchant), 2);
-			}
-			
+	public ItemStack getItemStackByName(String sStackName) {
+		ItemStack objStack = null;
+		if(Material.getMaterial(sStackName) != null) {
+			objStack = new ItemStack(Material.getMaterial(sStackName));
 		}
 		else {
-			sender.sendMessage(sErrorColor+language.getString("Oupps"));
-			return ItemStackOld;
+			System.out.println("Error with Material "+sStackName);
 		}
 		
-		
 		return objStack;
+	}
+	
+	public ItemStack getChangeItemStack(ItemStack ItemStackOld, CommandSender sender) {
+		
+			// More than one object just throw all except one
+			if(ItemStackOld.getAmount() > 1) {
+			
+				ItemStack ItemStackThrow = new ItemStack(ItemStackOld.getType());
+				ItemStackThrow.setAmount(ItemStackOld.getAmount()-1);
+				
+				Player player = (Player) sender;
+				ItemStackOld.setAmount(1);
+				player.getWorld().dropItem(player.getLocation().add(0, 5, 0), ItemStackThrow);
+			}
+		
+			int iChangeForGood = 0;
+			List<String> a_sItem = new ArrayList<String>();
+			
+			int iRandomInt = 0;
+			int iRandomItem = 0;
+		    //note a single Random object is reused here
+		    Random randomGenerator = new Random();
+		    for (int idx = 0; idx <= 10; ++idx){
+		    	iRandomInt = randomGenerator.nextInt(100);
+		    }
+			
+		    iChangeForGood = iRandomInt;
+
+		    switch(this.sTypeChoosen) {
+		    	case "medium":
+		    		iChangeForGood = iRandomInt + randomGenerator.nextInt(15);
+		    		break;
+		    		
+		    	case "high":
+		    		iChangeForGood = iRandomInt + randomGenerator.nextInt(35);
+		    		break;
+		    		
+		    	default:
+		    		// NOTHING TO DO SMALL IS HERE TOO
+		    		break;
+		    }
+		    
+		    
+			ItemStack objStack;
+			
+			// SET PERCENTAGE NO NEED TO CHECK Extra.percent... This is the last the rest
+			int iPoorMaxPercent = objects.getInt("poor.percent");
+			int iAverageMaxPercent = iPoorMaxPercent + objects.getInt("average.percent");
+			int iBetterMaxPercent = iAverageMaxPercent + objects.getInt("better.percent");
+			
+			
+			// POOR CHOICE HERE
+			if(iChangeForGood >= 0 && iChangeForGood < iPoorMaxPercent) {
+			
+				for(String sItem : objects.getStringList("poor.objects")) {
+					a_sItem.add(sItem);
+				}
+				
+				// GET THE RANDOM OBJECT TO PASS
+				iRandomItem = randomGenerator.nextInt(a_sItem.size());
+				
+				objStack = getItemStackByName((String) a_sItem.get(iRandomItem));
+				objStack.setAmount(randomGenerator.nextInt(objects.getInt("poor.maxItem")+1)+1);
+			}
+			else if(iChangeForGood >= iPoorMaxPercent && iChangeForGood < iAverageMaxPercent) {
+				
+				for(String sItem : objects.getStringList("average.objects")) {
+					a_sItem.add(sItem);
+				}
+				
+				// GET THE RANDOM OBJECT TO PASS
+				iRandomItem = randomGenerator.nextInt(a_sItem.size());
+
+				objStack = getItemStackByName((String) a_sItem.get(iRandomItem));
+				objStack.setAmount(randomGenerator.nextInt(objects.getInt("average.maxItem")+1)+1);
+			}
+			else if(iChangeForGood >= iAverageMaxPercent && iChangeForGood < iBetterMaxPercent) {
+				
+				for(String sItem : objects.getStringList("better.objects")) {
+					a_sItem.add(sItem);
+				}
+				
+				// GET THE RANDOM OBJECT TO PASS
+				iRandomItem = randomGenerator.nextInt(a_sItem.size());
+				
+				objStack = getItemStackByName((String) a_sItem.get(iRandomItem));
+				objStack.setAmount(randomGenerator.nextInt(objects.getInt("better.maxItem")+1)+1);
+			}
+			else if(iChangeForGood >= iBetterMaxPercent) {
+				
+				for (String key : objects.getConfigurationSection("extra.objects").getKeys(true)) {
+					a_sItem.add(key);
+				}
+				
+				// GET THE RANDOM OBJECT TO PASS
+				iRandomItem = randomGenerator.nextInt(a_sItem.size());
+				
+				objStack = getItemStackByName((String) a_sItem.get(iRandomItem));
+				objStack.setAmount(1);
+				objStack.setDurability((short) 299);
+				
+				for(String sEnchant : objects.getStringList("extra.objects."+(String) a_sItem.get(iRandomItem))) {
+					for(Enchantment objEnchant : Enchantment.values()) {
+						if(objEnchant.getKey().toString().contains(sEnchant.toLowerCase())){
+							objStack.addUnsafeEnchantment(objEnchant, 2);
+						}
+					}
+				}
+			}
+			else {
+				sender.sendMessage(sErrorColor+language.getString("Oupps"));
+				return ItemStackOld;
+			}
+			
+			playMusic((Player) sender);
+			return objStack;
 	}
 }
