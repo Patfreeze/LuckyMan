@@ -20,7 +20,7 @@ ExpCostHigh: 10
 ## DELAY TO REUSE ALL COMMAND IN SECOND
 iSecondDelay: 60
 
-## WORLDS
+## WORLDS TO ENABLE THIS PLUGIN
 listWorlds:
   - world
   - world_nether
