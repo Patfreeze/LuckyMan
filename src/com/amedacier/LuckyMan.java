@@ -29,6 +29,8 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -41,12 +43,21 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	String sErrorColor = "§c"; // LightRed
 	String sObjectColor = "§9"; // LightBlue
 	String sCorrectColor = "§2"; // Green
+	String sResetColor = "§r";
+	String sPluginName = "§2[LuckyMan] §r";
+	int iVersion = 107; // 106 on spigot
+	
+	File getDataFolderLink  = getDataFolder();
 
     private File configf,languagef, playerdataf, objectsf;
     private FileConfiguration config, language, playerdata, objects;
 
     public FileConfiguration getLanguageConfig() {
         return this.language;
+    }
+    
+    private void sendPluginMessage(Player player, String sMessage) {
+    	player.sendMessage(sPluginName+sMessage);
     }
     
     public FileConfiguration getPlayerDataConfig() {
@@ -193,7 +204,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	    	else {
 	    		// HERE MEAN STILL REMAIN TIME
 	    		long iRemain = config.getLong("iSecondDelay") - iLeft;
-	    		player.sendMessage(sCorrectColor+String.format(language.getString("DelayReuse"), sErrorColor+iRemain, (iRemain>1?"s":"")+sCorrectColor));
+	    		sendPluginMessage(player, sCorrectColor+String.format(language.getString("DelayReuse"), sErrorColor+iRemain, (iRemain>1?"s":"")+sCorrectColor));
 	    		return false;
 	    	}
 	    }
@@ -236,11 +247,25 @@ public class LuckyMan extends JavaPlugin implements Listener{
 		String[] args) {
 		
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(sErrorColor+"Cant be call from console");
+			sender.sendMessage(sPluginName+sErrorColor+"Cant be call from console");
 			return true;
 		}
 		
 		Player player1 = (Player) sender;
+		
+		// Are we in the good world?
+		boolean bInGoodWorld = false;
+		for(String world : config.getStringList("listWorlds")) {
+			if(world.equalsIgnoreCase(player1.getWorld().getName().toLowerCase())) {
+				bInGoodWorld = true;
+				break; // No need to go further we got our world
+			}
+		}
+		
+		if(!bInGoodWorld) {
+			sendPluginMessage(player1, sErrorColor+" disabled for this world");
+			return true;
+		}
 		
 		// THE MAIN COMMAND
 		if ((command.getName().equalsIgnoreCase("luckyman") && args.length == 0) || command.getName().equalsIgnoreCase("luckyman") && args[0].equalsIgnoreCase("help")) { // If the player typed /basic then do the following...
@@ -248,7 +273,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			
 			// TAKE THE iEXP COST IN CONFIG IF NOT GOOD TAKE DEFAULT
 			if(config.getBoolean("UseExpCost")) {
-				sender.sendMessage(sCorrectColor+String.format(language.getString("BewareLevel"),getExpLevelCost("small")));	
+				sendPluginMessage(player1, sCorrectColor+String.format(language.getString("BewareLevel"),getExpLevelCost("small")));
 			}
 			sender.sendMessage(sObjectColor+command.getUsage());
 			return true;
@@ -269,7 +294,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				Potion = new PotionEffect(PotionEffectType.CONFUSION, 200, 2);
 				player1.playSound(player1.getLocation(),Sound.ENTITY_ZOMBIE_AMBIENT, 1F, 1F);
 				player1.addPotionEffect(Potion);
-				sender.sendMessage(sObjectColor+language.getString("Zombify"));
+				sendPluginMessage(player1,sObjectColor+language.getString("Zombify"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 			
@@ -277,7 +302,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				Potion = new PotionEffect(PotionEffectType.BLINDNESS, 300, 2);
 				player1.playSound(player1.getLocation(),Sound.ENTITY_BAT_DEATH, 1F, 1F);
 				player1.addPotionEffect(Potion);
-				sender.sendMessage(sObjectColor+language.getString("lightPlz"));
+				sendPluginMessage(player1,sObjectColor+language.getString("lightPlz"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 				
@@ -285,7 +310,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				Potion = new PotionEffect(PotionEffectType.SPEED, 400, 2);
 				player1.playSound(player1.getLocation(),Sound.ITEM_FIRECHARGE_USE, 1F, 1F);
 				player1.addPotionEffect(Potion);
-				sender.sendMessage(sObjectColor+language.getString("speedUp"));
+				sendPluginMessage(player1,sObjectColor+language.getString("speedUp"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 				
@@ -293,7 +318,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				Potion = new PotionEffect(PotionEffectType.GLOWING, 400, 2);
 				player1.playSound(player1.getLocation(),Sound.BLOCK_GLASS_BREAK, 1F, 1F);
 				player1.addPotionEffect(Potion);
-				sender.sendMessage(sObjectColor+language.getString("LightUp"));
+				sendPluginMessage(player1,sObjectColor+language.getString("LightUp"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 				
@@ -301,14 +326,14 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				Potion = new PotionEffect(PotionEffectType.JUMP, 400, 2);
 				player1.playSound(player1.getLocation(),Sound.ENTITY_RABBIT_JUMP, 1F, 1F);
 				player1.addPotionEffect(Potion);
-				sender.sendMessage(sObjectColor+language.getString("JumpingJack"));
+				sendPluginMessage(player1,sObjectColor+language.getString("JumpingJack"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 			
 			default:
 				player1.playSound(player1.getLocation(),Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1F, 1F);
 				player1.playSound(player1.getLocation(),Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 2F, 2F);
-				sender.sendMessage(sObjectColor+language.getString("ArgExplode"));
+				sendPluginMessage(player1,sObjectColor+language.getString("ArgExplode"));
 				player1.performCommand("me "+language.getString("BeenTroll"));
 				break;
 			
@@ -321,7 +346,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			String sType = "small";
 			
 			if(args.length == 1) {
-				sender.sendMessage(sObjectColor+String.format(language.getString("helpType"), "small, medium, high"));
+				sendPluginMessage(player1,sObjectColor+String.format(language.getString("helpType"), "small, medium, high"));
 				return true;
 			}
 			
@@ -339,23 +364,23 @@ public class LuckyMan extends JavaPlugin implements Listener{
 					this.sTypeChoosen = sType;
 				}
 				else {
-					sender.sendMessage(sObjectColor+String.format(language.getString("getLuckType"),args[1]));
+					sendPluginMessage(player1,sObjectColor+String.format(language.getString("getLuckType"),args[1]));
 					return true;
 				}
 			}
 			
 			if (!(sender instanceof Player)) {
-				sender.sendMessage(sErrorColor+"This command can only be run by a player.");
+				sender.sendMessage(sPluginName+sErrorColor+"This command can only be run by a player.");
 			} else {
 				
 				// check if player have something in hand
 				if(player1.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					playErrorSound(player1);
-					sender.sendMessage(sObjectColor+language.getString("NothingHand"));
+					sendPluginMessage(player1,sObjectColor+language.getString("NothingHand"));
 				}
 				else if(config.getBoolean("UseExpCost") && player1.getLevel() < getExpLevelCost(sType)) {
 					playErrorSound(player1);
-					sender.sendMessage(sObjectColor+String.format(language.getString("NeedXP"), getExpLevelCost(sType)));
+					sendPluginMessage(player1,sObjectColor+String.format(language.getString("NeedXP"), getExpLevelCost(sType)));
 				}
 				else {
 					
@@ -366,10 +391,8 @@ public class LuckyMan extends JavaPlugin implements Listener{
 					}
 					
 					ItemStack objStack = getChangeItemStack(player1.getInventory().getItemInMainHand(), sender);
-					sender.sendMessage(sCorrectColor+String.format(language.getString("ConvertItem"), sErrorColor+player1.getInventory().getItemInMainHand().getType().toString(), sCorrectColor, sObjectColor+objStack.getType().toString()));
-					
+					sendPluginMessage(player1,sCorrectColor+String.format(language.getString("ConvertItem"), sErrorColor+player1.getInventory().getItemInMainHand().getType().toString(), sCorrectColor, sObjectColor+objStack.getType().toString()));
 					player1.getInventory().setItemInMainHand(new ItemStack(objStack));
-					
 					player1.setLevel(player1.getLevel()-getExpLevelCost(sType));
 					// return to default type
 					this.sTypeChoosen = "small";
@@ -432,7 +455,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	    if (p.hasPermission("sign.use")) {
 	 
 	        Block b = e.getClickedBlock();
-	        if (b.getType() == Material.SIGN || b.getType() == Material.WALL_SIGN) {
+	        if (b.getType().toString().contains("_SIGN")) {
 	   
 	            Sign sign = (Sign) b.getState();
 	            if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[LuckyMan]")) {
@@ -447,21 +470,21 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	                	Bukkit.dispatchCommand(p, "luckyman getLuck high");
 	                }
 	                else {
-	                	p.sendMessage(sErrorColor+language.getString("signNotWork")+" /LuckyMan getLuck [small,medium,high]");
+	                	sendPluginMessage(p,sErrorColor+language.getString("signNotWork")+" /LuckyMan getLuck [small,medium,high]");
 	                }
-
 	            }
-	   
 	        }
-	 
 	    }
-
 	}
 	
 	public ItemStack getItemStackByName(String sStackName) {
 		ItemStack objStack = null;
 		if(Material.getMaterial(sStackName) != null) {
-			objStack = new ItemStack(Material.getMaterial(sStackName));
+			objStack = new ItemStack(Material.getMaterial(sStackName), 1);
+			
+			Damageable im = (Damageable) objStack.getItemMeta();
+			im.setDamage(im.getDamage()-im.getDamage()+10);
+			objStack.setItemMeta((ItemMeta) im);
 		}
 		else {
 			System.out.println("Error with Material "+sStackName);
@@ -566,9 +589,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				iRandomItem = randomGenerator.nextInt(a_sItem.size());
 				
 				objStack = getItemStackByName((String) a_sItem.get(iRandomItem));
-				objStack.setAmount(1);
-				objStack.setDurability((short) 299);
-				
+								
 				for(String sEnchant : objects.getStringList("extra.objects."+(String) a_sItem.get(iRandomItem))) {
 					for(Enchantment objEnchant : Enchantment.values()) {
 						if(objEnchant.getKey().toString().contains(sEnchant.toLowerCase())){
@@ -578,7 +599,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				}
 			}
 			else {
-				sender.sendMessage(sErrorColor+language.getString("Oupps"));
+				sendPluginMessage((Player) sender,sErrorColor+language.getString("Oupps"));
 				return ItemStackOld;
 			}
 			

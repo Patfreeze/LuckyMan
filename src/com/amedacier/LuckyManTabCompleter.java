@@ -2,7 +2,6 @@ package com.amedacier;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -17,8 +16,8 @@ public class LuckyManTabCompleter implements TabCompleter {
 		switch(cmd.getName().toLowerCase()) {
 			
 			case "luckyman":
-				// TheClock module so check what we need
-				
+				// Luckman module so check what we need
+		
 				switch(args.length) {
 					case 1: // First level
 						
