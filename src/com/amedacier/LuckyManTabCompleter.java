@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+
 public class LuckyManTabCompleter implements TabCompleter {
 	
 	@Override
