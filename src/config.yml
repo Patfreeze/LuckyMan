@@ -1,9 +1,9 @@
 ############################
-## config LuckyMan 1.0.3
+## config LuckyMan 1.0.7
 ##########################################################################
 
 ### DO NOT CHANGE THE iVersion... If so the plugin will not work
-iVersion: 103
+iVersion: 107
 
 ## USE EXP COST CHANGE TO FALSE IF YOU DONT WANT PLAYER LOOSE XP
 UseExpCost: true
@@ -20,3 +20,9 @@ ExpCostHigh: 10
 ## DELAY TO REUSE ALL COMMAND IN SECOND
 iSecondDelay: 60
 
+## WORLDS TO ENABLE THIS PLUGIN
+listWorlds:
+  - world
+  - world_nether
+  - world_the_end
+  

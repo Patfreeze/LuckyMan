@@ -10,19 +10,19 @@ poor:
   maxItem: 4
   objects:
     - 'BONE'
-    - 'SAPLING'
+    - 'OAK_SAPLING'
     - 'SAND'
-    - 'LEAVES'
+    - 'BIRCH_LEAVES'
     - 'GLASS'
     - 'SANDSTONE'
-    - 'YELLOW_FLOWER'
-    - 'RED_ROSE'
+    - 'CHORUS_FLOWER'
+    - 'ROSE_RED'
     - 'MOSSY_COBBLESTONE'
-    - 'WORKBENCH'
+    - 'CRAFTING_TABLE'
     - 'FURNACE'
     - 'SIGN'
     - 'STONE_BUTTON'
-    - 'WOOD_BUTTON'
+    - 'OAK_BUTTON'
     - 'STICK'
     - 'CACTUS'
 average:
@@ -31,13 +31,13 @@ average:
   objects:
     - 'COAL'
     - 'COBBLESTONE'
-    - 'WOOD'
-    - 'LOG'
+    - 'OAK_WOOD'
+    - 'BIRCH_LOG'
     - 'GRAVEL'
     - 'FEATHER'
-    - 'POTATO_ITEM'
-    - 'CARROT_ITEM'
-    - 'ACACIA_DOOR_ITEM'
+    - 'POTATO'
+    - 'CARROT'
+    - 'ACACIA_DOOR'
     - 'APPLE'
     - 'BOW'
     - 'ARMOR_STAND'
@@ -63,23 +63,24 @@ extra:
   objects:
     DIAMOND_SWORD:
       - 'FIRE_ASPECT'
-      - 'DURABILITY'
+      - 'UNBREAKING'
     DIAMOND_SPADE:
-      - 'DURABILITY'
+      - 'UNBREAKING'
     DIAMOND_PICKAXE:
-      - 'LOOT_BONUS_BLOCKS'
+      - 'LUCK'
+      - 'UNBREAKING'
     DIAMOND_AXE:
-      - 'DURABILITY'
+      - 'UNBREAKING'
     DIAMOND_HOE:
-      - 'DURABILITY'
+      - 'UNBREAKING'
     DIAMOND_HELMET:
       - 'OXYGEN'
-      - 'DURABILITY'
+      - 'UNBREAKING'
     DIAMOND_CHESTPLATE:
-      - 'PROTECTION_EXPLOSIONS'
-      - 'DURABILITY'
+      - 'PROTECTION'
+      - 'UNBREAKING'
     DIAMOND_LEGGINGS:
       - 'PROTECTION_FIRE'
     DIAMOND_BOOTS:
       - 'FROST_WALKER'
-      - 'DURABILITY'
+      - 'UNBREAKING'
