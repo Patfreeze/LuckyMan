@@ -42,7 +42,7 @@ average:
     - 'BOW'
     - 'ARMOR_STAND'
     - 'BAKED_POTATO'
-    - 'BOAT_ACACIA'
+    - 'ACACIA_BOAT'
 better:
   percent: 10
   maxItem: 1
