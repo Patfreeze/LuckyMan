@@ -1,9 +1,9 @@
 ############################
-## config LuckyMan 1.0.7
+## config LuckyMan 1.0.8
 ##########################################################################
 
 ### DO NOT CHANGE THE iVersion... If so the plugin will not work
-iVersion: 107
+iVersion: 108
 
 ## USE EXP COST CHANGE TO FALSE IF YOU DONT WANT PLAYER LOOSE XP
 UseExpCost: true
