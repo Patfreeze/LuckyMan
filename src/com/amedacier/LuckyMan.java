@@ -35,6 +35,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+// Version on spigot 1.0.7
+
 public class LuckyMan extends JavaPlugin implements Listener{
 
 	// SOME GLOBAL
@@ -45,7 +47,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	String sCorrectColor = "§2"; // Green
 	String sResetColor = "§r";
 	String sPluginName = "§2[LuckyMan] §r";
-	int iVersion = 107; // 106 on spigot
+	int iVersion = 108; // 107 on spigot
 	
 	File getDataFolderLink  = getDataFolder();
 
