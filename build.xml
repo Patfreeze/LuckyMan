@@ -2,7 +2,7 @@
 <project name="LuckyMan" default="makejar" basedir=".">
 	<target name="makejar" description="Create a jar for the project">
 		<mkdir dir="target"></mkdir>
-		<jar destfile="target/${ant.project.name}1.0.8_mc1.16.4.jar">
+		<jar destfile="target/${ant.project.name}1.0.8_mc1.17.jar">
 			<fileset dir="bin"></fileset>
 			<fileset file="plugin.yml"></fileset>
 		</jar>
