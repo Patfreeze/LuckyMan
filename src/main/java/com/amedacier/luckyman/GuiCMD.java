@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class GuiCMD {
 
-
     private void placeItem(Inventory worldGui, int position, Material material, String displayName, ArrayList<String> lore, int amount) {
         placeItem(worldGui,position, material, displayName, lore, amount, true);
     }
@@ -72,9 +71,6 @@ public class GuiCMD {
             iMed = config.getInt("ExpCostMedium");
             iHigh = config.getInt("ExpCostHigh");
         }
-
-
-
         Player player = null;
         if(sender instanceof Player) {
             player = (Player) sender;
@@ -95,16 +91,36 @@ public class GuiCMD {
 
                     ////////////////////////////////////////////////////////////////////////////////////////////////////
                     //
-                    // XP -> GETLUCK - LOW
+                    // XP -> GETLUCK
                     //
                     /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    // SMALLER
                     ArrayList<String> lore = new ArrayList<String>();
                     lore.add("§2§cClick to exchange");
 
                     if(iLow > 0) {
                         lore.add("§c§2Cost " + iLow+"xp");
                     }
-                    placeItem(worldGui, 10, Material.LIME_WOOL, "§2Buy §aEmerald!", lore, 1);
+                    placeItem(worldGui, 10, Material.WOODEN_HOE, "§2Smaller chance!", lore, 1);
+
+                    // MEDIUM
+                    lore = new ArrayList<String>();
+                    lore.add("§2§cClick to exchange");
+
+                    if(iMed > 0) {
+                        lore.add("§c§2Cost " + iMed+"xp");
+                    }
+                    placeItem(worldGui, 13, Material.IRON_HOE, "§2Medium chance!", lore, 1);
+
+                    // HIGHER
+                    lore = new ArrayList<String>();
+                    lore.add("§2§cClick to exchange");
+
+                    if(iHigh > 0) {
+                        lore.add("§c§2Cost " + iHigh+"xp");
+                    }
+                    placeItem(worldGui, 16, Material.GOLDEN_HOE, "§2Higher chance!", lore, 1);
 
                     break;
 

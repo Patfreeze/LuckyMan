@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -298,6 +299,58 @@ public class LuckyMan extends JavaPlugin implements Listener{
 		playSound(p, 1F, 4);
 	}
 
+	@EventHandler
+	private void inventoryClick(InventoryClickEvent e)
+	{
+		Player p = (Player) e.getWhoClicked();
+
+		if (
+			!(e.getView().getTitle().toLowerCase().equalsIgnoreCase("luckyman: getluck")) || // Not our plugin
+			(e.getCurrentItem() == null) || // or if no item
+			(e.getCurrentItem().getType().equals(Material.AIR)) // or if item is AIR
+		) {
+			// We do nothing so return void
+			return;
+		}
+
+		// Remove color and put the displayName in lower case
+		String getDisplayName = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).toLowerCase();
+
+		/////////////////////
+		//SECTION GetLuck
+		//////////////////////////////
+		if(
+				getDisplayName.equalsIgnoreCase("smaller chance!") || // We check your config item
+				getDisplayName.equalsIgnoreCase("medium chance!") || // We check your config item
+				getDisplayName.equalsIgnoreCase("higher chance!") || // We check your config item
+				getDisplayName.equalsIgnoreCase("!!!") // We check your config item (void one)
+		){
+			// We cancel the event (so nothing can be taken from this chest)
+			e.setCancelled(true);
+		}
+
+		//////////////////////////////////
+		// SECTION TRANSACTION
+		//////////////////////////////////
+		System.out.println(getDisplayName.toLowerCase());
+		p.closeInventory(); // Close inv
+
+		// Perform command like if the player as written itself
+		switch(getDisplayName.toLowerCase()) {
+			case "smaller chance!":
+				p.performCommand("luckyman getluck small"); // performCommand for the player
+				break;
+
+			case "medium chance!":
+				p.performCommand("luckyman getluck medium"); // performCommand for the player
+				break;
+
+			case "higher chance!":
+				p.performCommand("luckyman getluck high"); // performCommand for the player
+				break;
+		}
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender,
 		Command command,
@@ -331,11 +384,21 @@ public class LuckyMan extends JavaPlugin implements Listener{
 			return true;
 		}
 
-		String arg0 = args[0].toLowerCase();
+		String arg0 = "";
+		if(args.length > 0) {
+			arg0 = args[0].toLowerCase();
+		}
 
 		// Switch on the arg.#1 - 0 base
 		switch(arg0) {
-			case "": // If empty show help
+			case "": // If empty show GUI
+			case "gui":
+				try {
+					new GuiCMD(this, sender, "Getluck", getDataFolder());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return true;
 			case "help":
 				// HELP COMMAND OR COMMAND WITHOUT ARGS
 

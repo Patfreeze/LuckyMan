@@ -24,6 +24,7 @@ public class LuckyManTabCompleter implements TabCompleter {
 						
 						list.add("Help");
 						list.add("GetLuck");
+						list.add("Gui");
 						list.add("ForFun");
 						return list;
 						
