@@ -102,7 +102,7 @@ public class GuiCMD {
                     if(iLow > 0) {
                         lore.add("§c§2Cost " + iLow+"xp");
                     }
-                    placeItem(worldGui, 10, Material.WOODEN_HOE, "§2Smaller chance!", lore, 1);
+                    placeItem(worldGui, 1, Material.WOODEN_HOE, "§2Smaller chance!", lore, 1);
 
                     // MEDIUM
                     lore = new ArrayList<String>();
@@ -111,7 +111,7 @@ public class GuiCMD {
                     if(iMed > 0) {
                         lore.add("§c§2Cost " + iMed+"xp");
                     }
-                    placeItem(worldGui, 13, Material.IRON_HOE, "§2Medium chance!", lore, 1);
+                    placeItem(worldGui, 4, Material.IRON_HOE, "§2Medium chance!", lore, 1);
 
                     // HIGHER
                     lore = new ArrayList<String>();
@@ -120,7 +120,13 @@ public class GuiCMD {
                     if(iHigh > 0) {
                         lore.add("§c§2Cost " + iHigh+"xp");
                     }
-                    placeItem(worldGui, 16, Material.GOLDEN_HOE, "§2Higher chance!", lore, 1);
+                    placeItem(worldGui, 7, Material.GOLDEN_HOE, "§2Higher chance!", lore, 1);
+
+                    // FORFUN (funny Effect)
+                    lore = new ArrayList<String>();
+                    lore.add("§2§cClick if you have cubes");
+                    lore.add("§c§2Funny effect no danger.");
+                    placeItem(worldGui, 22, Material.POTATO, "§2Forfun!", lore, 1);
 
                     break;
 

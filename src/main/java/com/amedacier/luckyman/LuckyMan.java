@@ -44,7 +44,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	String sCorrectColor = "§2"; // Green
 	String sResetColor = "§r";
 	String sPluginName = "§2[LuckyMan] §r";
-	int iVersion = 109; // 108 on spigot
+	int iVersion = 201; // 200 on spigot
 	
 	File getDataFolderLink  = getDataFolder();
 
@@ -323,6 +323,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				getDisplayName.equalsIgnoreCase("smaller chance!") || // We check your config item
 				getDisplayName.equalsIgnoreCase("medium chance!") || // We check your config item
 				getDisplayName.equalsIgnoreCase("higher chance!") || // We check your config item
+				getDisplayName.equalsIgnoreCase("forfun!") || // We check your config item
 				getDisplayName.equalsIgnoreCase("!!!") // We check your config item (void one)
 		){
 			// We cancel the event (so nothing can be taken from this chest)
@@ -347,6 +348,14 @@ public class LuckyMan extends JavaPlugin implements Listener{
 
 			case "higher chance!":
 				p.performCommand("luckyman getluck high"); // performCommand for the player
+				break;
+
+			case "forfun!":
+				p.performCommand("luckyman forfun"); // performCommand for the player
+				break;
+
+			default:
+				p.sendMessage(sPluginName+"Well this is not a valid think '"+getDisplayName+"'...");
 				break;
 		}
 	}
