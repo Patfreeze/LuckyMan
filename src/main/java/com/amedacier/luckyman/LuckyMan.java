@@ -44,7 +44,6 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	String sCorrectColor = "§2"; // Green
 	String sResetColor = "§r";
 	String sPluginName = "§2[LuckyMan] §r";
-	int iVersion = 201; // 200 on spigot
 	
 	File getDataFolderLink  = getDataFolder();
 
