@@ -3,6 +3,7 @@ package com.amedacier.luckyman;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-// Version on spigot 1.0.8
 
 public class LuckyMan extends JavaPlugin implements Listener{
 
@@ -44,6 +44,10 @@ public class LuckyMan extends JavaPlugin implements Listener{
 	String sCorrectColor = "§2"; // Green
 	String sResetColor = "§r";
 	String sPluginName = "§2[LuckyMan] §r";
+	String sPluginNameConsole = "[LuckyMan] ";
+
+	// This will be use for message in console
+	public static final Logger LOG = Logger.getLogger("Minecraft");
 	
 	File getDataFolderLink  = getDataFolder();
 
@@ -332,7 +336,7 @@ public class LuckyMan extends JavaPlugin implements Listener{
 		//////////////////////////////////
 		// SECTION TRANSACTION
 		//////////////////////////////////
-		System.out.println(getDisplayName.toLowerCase());
+		//System.out.println(getDisplayName.toLowerCase());
 		p.closeInventory(); // Close inv
 
 		// Perform command like if the player as written itself
@@ -353,8 +357,11 @@ public class LuckyMan extends JavaPlugin implements Listener{
 				p.performCommand("luckyman forfun"); // performCommand for the player
 				break;
 
+			case "!!!": // Ignore this one
+				break;
+
 			default:
-				p.sendMessage(sPluginName+"Well this is not a valid think '"+getDisplayName+"'...");
+				LOG.info(sPluginNameConsole+"inventoryClick '"+getDisplayName+"' is not implemented");
 				break;
 		}
 	}

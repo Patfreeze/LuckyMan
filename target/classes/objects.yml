@@ -4,7 +4,7 @@
 ################################################################
 
 ## OBJECTS
-## maxItem is the maximum of objects so if 4 it will be between 1 to 4
+## maxItem is the maximum of objects so if 4 it will be between 1 and 4
 poor:
   percent: 55
   maxItem: 4
@@ -56,7 +56,7 @@ better:
     - 'CHAINMAIL_CHESTPLATE'
     - 'CHAINMAIL_HELMET'
     - 'CHAINMAIL_LEGGINGS'
-## SPECIAL PART WITH ENCHANT HERE SO BE VERY VERY CAREFULL HERE
+## SPECIAL PART WITH ENCHANT HERE SO BE VERY VERY CAREFULLY HERE
 extra:
   percent: 5
   maxItem: 1
